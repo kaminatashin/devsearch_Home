@@ -1,0 +1,17 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<h1>Project Form</h1>
+<form action="" method="POST" enctype="multipart/form-data">
+   {% csrf_token %}
+   {{form.as_p}}
+   <!-- <h1>Second Fetch Data</h1>
+   {% for field in form %}
+   {{field.lable}}
+   {{field}}
+   {% endfor%}  -->
+   <input type="submit">
+</form>
+
+{% endblock %}
