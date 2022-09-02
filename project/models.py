@@ -1,14 +1,18 @@
+from cProfile import Profile
 from contextlib import nullcontext
 from email.policy import default
 from pyexpat import model
+from re import T
 from types import TracebackType
 from unicodedata import name
 from venv import create
 from django.db import models
 import uuid
+from users.models import Profiles
 
 # Create your models here.
 class Project(models.Model):
+    owner= models.ForeignKey(Profiles,null=True,blank=True,on_delete=models.SET_NULL)
     title=models.CharField(max_length=200)
     description=models.TextField(null=True , blank=True)
     featured_image= models.ImageField(null=True,blank=True,default='default.jpg')
