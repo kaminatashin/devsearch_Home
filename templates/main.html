@@ -32,12 +32,12 @@
         {% for message in messages %}
             <div class="alert alert--{{message.tags}}">
                 <p class="alert__message">{{message}}</p>
-                <button class="alert__close">close</button>
+                <button class="alert__close">X</button>
             </div>
         {% endfor %}
+    {% endif %}
     {% block content %}
 
-{% endif %}
 
     {% endblock content %}
 
