@@ -1,4 +1,4 @@
-from cProfile import label
+from cProfile import Profile, label
 from dataclasses import fields
 from inspect import classify_class_attrs
 from pyexpat import model
@@ -6,7 +6,7 @@ from tkinter.ttk import LabeledScale
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-
+from .models import Profiles
 class CustomUserCreattionForm(UserCreationForm):
     class Meta():
         model=User
@@ -19,4 +19,19 @@ class CustomUserCreattionForm(UserCreationForm):
         for name,field in self.fields.items():
             # fields.widget.attrs.update({'class':'input'})
             field.widget.attrs.update({'class':'input'})
+
+
+class profileForm(ModelForm): 
+    class Meta:
+        model= Profiles
+        # fields='__all__'
+        fields=['name','email','username','location','bio','short_intro',
+               'profile_image','social_github','social_twitter','socail_linkedin',
+               'social_youtube','social_website']
+    def __init__(self, *args, **kwargs) :
+        super(profileForm,self).__init__(*args, **kwargs)
+        for name,field in self.fields.items():
+            # fields.widget.attrs.update({'class':'input'})
+            field.widget.attrs.update({'class':'input'})
+
 

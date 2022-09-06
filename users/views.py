@@ -2,13 +2,14 @@ from email import message
 from multiprocessing import context
 from ssl import _create_unverified_context
 from unicodedata import decomposition
+from wsgiref.util import request_uri
 from django.shortcuts import render,redirect
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Profiles
-from .forms  import CustomUserCreattionForm
+from .forms  import CustomUserCreattionForm ,profileForm
 
 
 
@@ -49,7 +50,7 @@ def registerUser(request):
 
             messages.success(request,"user account  was created!")
             login(request,user)
-            return redirect('profiles')
+            return redirect('edit-account')
         else:
             messages.error(request,"An error has occurred during to registration")    
 
@@ -71,3 +72,24 @@ def userProfile(request,pk):
     otherskills=profile.skill_set.filter(description="")
     context={'profile':profile,'topskill':topskill,'otherskills':otherskills}
     return render(request ,'users/user-profile.html',context)
+
+@login_required(login_url='login')
+def userAccount(request):
+    profile=request.user.profiles
+    skill= profile.skill_set.all() 
+    projects=profile.project_set.all()
+    context={'profile': profile,'skill':skill,'projects':projects}
+    return render(request,'users/account.html',context)
+
+
+@login_required(login_url='login')
+def editAccount(request):
+    profile=request.user.profiles
+    form=profileForm(instance=profile)
+    if request.method =='POST':
+        form=profileForm(request.POST, request.FILES ,instance=profile)
+        if form.is_valid:
+            form.save()
+            return redirect('account')
+    context={'form':form}
+    return render(request,'users/profile_form.html',context)

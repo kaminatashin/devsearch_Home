@@ -1,3 +1,4 @@
+from msilib.schema import InstallUISequence
 import profile
 from django.db.models.signals import post_save,post_delete
 from django.contrib.auth.models import User
@@ -18,6 +19,16 @@ def createProfile(sender,instance,created,**kwargs):
     # print("profile update.......")
     # print("instance:",instance)
     # print("created:",created)
+def updateProfile(sender,instance,created,**kwargs):
+    profile = instance
+    user=profile.user
+    if created == False:
+        user.first_user=profile.name
+        user.username=profile.username
+        user.email=profile.email
+        user.save()
+
+
 # @receiver(post_delete,Profiles)    
 def deleteUser(sender,instance,**kwarags):
      print('instance:',str(instance) )
@@ -26,6 +37,7 @@ def deleteUser(sender,instance,**kwarags):
      user.delete()
 
 post_save.connect(createProfile,sender=User)
+post_save.connect(updateProfile,sender=Profiles)
 post_delete.connect(deleteUser,sender= Profiles)
      
 
