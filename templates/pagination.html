@@ -1,0 +1,21 @@
+{%if queryset.has_other_pages %}
+  <div class="paginations">
+    <ul class="container">      
+      {%if queryset.has_previous %}
+        <i><a href="?page={{queryset.previous_page_number}}" class="btn page-link "> &#10094 Prev</a></i>
+      {%endif %}
+      <!-- for page in paginator.page_range   -->
+      {%for page in custom_range %}
+
+          {%if page == queryset.number%}
+           <i><a href="?page={{page}}" class="btn page-link btn--sub">{{page}}</a></i>
+          {%else%}
+           <i><a href="?page={{page}}" class="btn page-link">{{page}}</a></i>
+          {%endif%}
+      {%endfor%}
+      {%if queryset.has_next %}
+       <i><a href="?page={{queryset.next_page_number}}" class="btn page-link ">  Next &#10095</a></i>
+      {%endif %}
+    </ul>
+  </div>
+{%endif %}

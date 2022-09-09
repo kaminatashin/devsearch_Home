@@ -1,9 +1,14 @@
 from multiprocessing import context
 import re
+from unittest import result
 from django.shortcuts import render,redirect  
 from django.http import HttpResponse
+from django.db.models import Q
+from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
+from project.utils import searchProject
 from .models import Project
 from .forms import ProjectForm
+from .utils  import searchProject,paginatProject
 from django.contrib.auth.decorators import login_required
 
 
@@ -26,11 +31,12 @@ from django.contrib.auth.decorators import login_required
 # ]
 
 def projects(request):
-    projects=Project.objects.all()
-   # page="Project"
+    projects,search_query=searchProject(request)
+    # page="Project"
   #  number=11
   #  context={'page':page,'number':number,'projects':projectsList}
-    context={'projects':projects}
+    custom_range,projects=paginatProject(request,projects,2)
+    context={'projects':projects,'search_query':search_query,'custom_range':custom_range}
    # return HttpResponse("here is our product")
     return render(request,'projects/projects.html',context)
     # return render(request,'main.html',context)
@@ -84,7 +90,7 @@ def deleteProject(request,pk):
         project.delete()
         return redirect('projects')
 
-    return render(request,'projects/delete_template.html',context)
+    return render(request,'delete_template.html',context)
 
 
 # Create your views here.

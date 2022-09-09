@@ -8,6 +8,7 @@ from unicodedata import name
 from venv import create
 from django.db import models
 import uuid
+
 from users.models import Profiles
 
 # Create your models here.
@@ -27,7 +28,12 @@ class Project(models.Model):
     id=models.UUIDField(default=uuid.uuid4,unique=True,
                         primary_key=True,editable=False)
     def __str__(self):
-        return self.title                 
+        return self.title  
+
+    class Meta:
+        ordering=['-created']
+
+
 class Review(models.Model):
     VOTE_TYPE = (
         ('up','Up Vote'),
