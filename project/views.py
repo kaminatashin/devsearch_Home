@@ -35,7 +35,7 @@ def projects(request):
     # page="Project"
   #  number=11
   #  context={'page':page,'number':number,'projects':projectsList}
-    custom_range,projects=paginatProject(request,projects,2)
+    custom_range,projects=paginatProject(request,projects,6)
     context={'projects':projects,'search_query':search_query,'custom_range':custom_range}
    # return HttpResponse("here is our product")
     return render(request,'projects/projects.html',context)
