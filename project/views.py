@@ -7,7 +7,8 @@ from django.db.models import Q
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 from project.utils import searchProject
 from .models import Project
-from .forms import ProjectForm
+from .forms import ProjectForm ,ReviewForm
+from django.contrib import messages
 from .utils  import searchProject,paginatProject
 from django.contrib.auth.decorators import login_required
 
@@ -47,9 +48,22 @@ def project(request,pk):
  #      if i['id'] == pk :
  #          projectObj=i   
     projectObj=Project.objects.get(id=pk)
+    form=ReviewForm()
+    if request.method == 'POST':
+        form=ReviewForm(request.POST)
+        review=form.save(commit=False)
+        review.project=projectObj
+        review.owner=request.user.profiles
+        review.save()
+        projectObj.getVoteCount
+        messages.success(request,'tank you ,your review was successfully submitted ')
+        return redirect('project',pk=projectObj.id)
+       
     tags=projectObj.tags.all()
     #return HttpResponse("Single Project"+" "+ str(pk)+"")
-    return render(request,'projects/single-project.html',{'projectObj':projectObj,'tags':tags})
+    return render(request,'projects/single-project.html',{'projectObj':projectObj,
+                    'tags':tags,'form':form}
+                )
 
 
 @login_required(login_url="login")    
@@ -77,7 +91,8 @@ def updateProject(request,pk):
         form=ProjectForm(request.POST ,request.FILES ,instance=project)
         if form.is_valid:
             form.save()
-            return redirect('projects')
+            # return redirect('projects')
+            return redirect('account')
     context={'form':form}
     return render(request,'projects/project_form.html',context)
 
