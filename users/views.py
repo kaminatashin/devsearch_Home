@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q 
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Profiles
+from .models import Profiles ,Message
 from .forms  import CustomUserCreattionForm ,profileForm,SkillForm
 from .utils import  searchProfiles,paginatProfiles
 
@@ -140,4 +140,19 @@ def deleteSkill(request,pk):
     context={'object':skill}
     return render(request,'delete_template.html',context)
 
-
+@login_required(login_url='login')
+def inbox(request):
+    profile=request.user.profiles
+    messageRequest=profile.messages.all()
+    un_readCount=messageRequest.filter(is_read=False).count()
+    context={'messageRequest':messageRequest,'un_readCount':un_readCount}
+    return render(request,'users/inbox.html',context)
+@login_required(login_url='login')
+def viewMessage(request,pk):
+    profile=request.user.profiles
+    message=profile.messages.get(id=pk)    
+    if message.is_read==False:
+        message.is_read=True
+        message.save()
+    context={'message':message}
+    return render(request,'users/message.html',context)
