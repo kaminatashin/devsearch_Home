@@ -122,14 +122,20 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
+# #For Gmail
 EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST='smtp.gmail.com'
 EMAIL_PORT=587
 EMAIL_USE_TLS=True 
 EMAIL_HOST_USER='katashin@gmail.com'
-EMAIL_HOST_PASSWORD='Sepanta3571#@!'
-
+EMAIL_HOST_PASSWORD='ycwwowraqdzqozpu'
+# #For Yahoo
+# EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST='smtp.mail.yahoo.com'
+# EMAIL_PORT=587
+# EMAIL_USE_SSL = True
+# EMAIL_HOST_USER='k.atashin@yahoo.com'
+# EMAIL_HOST_PASSWORD='Sepanta3571#@!'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/

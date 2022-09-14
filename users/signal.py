@@ -7,6 +7,7 @@ from django.dispatch import receiver
 from django.core.mail import send_mail
 from django.conf import settings
 
+
 subject='Welcome to DevSearch'
 message='Wae are glad you in heare!'
 # @receiver(post_save,Profiles)
@@ -21,7 +22,7 @@ def createProfile(sender,instance,created,**kwargs):
             name=user.first_name
         )
         send_mail(
-            subject,
+            subject, 
             message,
             settings.EMAIL_HOST_USER,
             [profile.email],
