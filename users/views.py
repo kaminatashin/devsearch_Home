@@ -1,7 +1,9 @@
 from email import message
 from encodings import search_function
+from http.client import HTTPResponse
 from multiprocessing import context
 from ssl import _create_unverified_context
+from tkinter.messagebox import NO
 from unicodedata import decomposition
 from unittest import skip
 from wsgiref.util import request_uri
@@ -12,7 +14,7 @@ from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Profiles ,Message
-from .forms  import CustomUserCreattionForm ,profileForm,SkillForm
+from .forms  import CustomUserCreattionForm, profileForm,SkillForm,MessageForm
 from .utils import  searchProfiles,paginatProfiles
 
 
@@ -156,3 +158,27 @@ def viewMessage(request,pk):
         message.save()
     context={'message':message}
     return render(request,'users/message.html',context)
+
+def createMessage(request,pk):
+    recipient=Profiles.objects.get(id=pk) 
+    form=MessageForm()
+    try:
+        sender=request.user.profile
+    except:
+        sender=None
+    if request.method=='POST' :
+        form=MessageForm(request.POST)
+        if form.is_valid():
+            message=form.save(commit=False)
+            message.sender=sender
+            message.recipient=recipient
+            if sender:
+                message.name=sender.name
+                message.email=sender.email
+            message.save()    
+            messages.success(request,'Your message was successfully send!')
+            return redirect('user-profile',pk=recipient.id)
+
+
+    context={'recipient':recipient,'form':form}
+    return render(request,'users/message_form.html',context)
