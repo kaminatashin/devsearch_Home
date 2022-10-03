@@ -1,6 +1,7 @@
 from urllib import response
 from django.http import JsonResponse
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,permission_classes
+from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework.response import Response
 from .serializers import ProjectSerializer
 from project.models import Project,Tag
@@ -9,7 +10,9 @@ from users.models import Profiles
 from api import serializers
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getRoutes(request):
+    print('USER:',request.user)
     routes=[
         {'GET':'/api/projects'},
         {'GET':'api/projects/id'},
