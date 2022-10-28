@@ -38,11 +38,11 @@ def getProject(request,pk):
     return Response(serializer.data)
 
 @api_view(['POST'])
-@permission_classes(IsAuthenticated)
+@permission_classes([IsAuthenticated])
 def projectVote(request,pk):
     project=Project.objects.get(id=pk)
-    user=request.profiles.user
-    data=request.date
+    user=request.user.profiles
+    data=request.data
     review,created=Review.objects.get_or_create(
         owner=user,
         project=project,
@@ -50,5 +50,6 @@ def projectVote(request,pk):
     review.value=data['value']
     review.save()
     project.getVoteCount
+    print('data:',data)
     serializer=ProjectSerializer(project,many=False)
     return Response(serializer.data)
