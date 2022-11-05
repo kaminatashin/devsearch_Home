@@ -12,7 +12,7 @@
         <li class="message "></li>
         {%endif%}
           <a href="{% url 'message' message.id%}">
-            <span class="message__author">{{message.name}}</span>
+            <span class="message__author"><a href="">{{message.name}}</span></span>
             <span class="message__subject">{{message.subject}}</span>
             <span class="message__date">{{message.created}}</span>
           </a>

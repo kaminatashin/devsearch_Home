@@ -7,7 +7,7 @@ from .serializers import ProjectSerializer
 from project.models import Project,Tag,Review
 from users.models import Profiles
 
-from api import serializers
+# from api import serializers
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -53,3 +53,13 @@ def projectVote(request,pk):
     print('data:',data)
     serializer=ProjectSerializer(project,many=False)
     return Response(serializer.data)
+
+@api_view(['DELETE'])
+def removeTags(request):
+    tagId=request.data['tag']
+    projectId=request.data['project']
+    project=Project.objects.get(id=projectId)
+    tag=Tag.objects.get(id=tagId)
+    project.tags.remove(tag)
+
+    return Response('Tags was deleted!')
